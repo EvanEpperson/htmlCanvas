@@ -1,6 +1,7 @@
 const myImage = new Image();
 myImage.src = './image8.jpg';
 
+
 myImage.addEventListener('load', () => {
     const canvas = document.getElementById("canvas1");
     const ctx = canvas.getContext("2d");
@@ -26,6 +27,7 @@ myImage.addEventListener('load', () => {
             const brightness = calculateRelativeBrightness(red,green, blue)
             const cell = [
                 cellBrightness = brightness, 
+                cellColor = 'rgb(' + red + ',' + green + ',' + blue + ')'
             ];
             row.push(cell); 
         }
@@ -59,15 +61,23 @@ myImage.addEventListener('load', () => {
             let movement = (2.5 - this.speed) + this.velocity;
 
             this.y+= movement;
-            if(this.y >= canvas.height){
-                this.y = 0
-                this.x = Math.random() * canvas.width;
+            this.x += movement;
+            if (this.y >= canvas.height) {
+              this.y = 0;
+              this.x = Math.random() * canvas.width;
             }
+            // add this for sideways rain 
+            if (this.x >= canvas.width) {
+                this.x = 0;
+                this.y = Math.random() * canvas.height;
+            } 
         }
         draw() {
             ctx.beginPath();
             // color of the rain 
-            ctx.fillStyle = 'white';
+            // how to add color or add your own color to the rain
+            // ctx.fillStyle = 'white';
+            ctx.fillStyle = mappedImage[this.position1][this.position2][1];
             ctx.arc(this.x, this.y, this.seize, 0, Math.PI * 2 )
             ctx.fill()
         }
