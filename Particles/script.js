@@ -14,6 +14,7 @@ let mouse = {
 window.addEventListener('mousemove', (event) => {
     mouse.x = event.x
     mouse.y = event.y
+    mouse.radius = 150
     // console.log(mouse.x, mouse.y);
 
 })
@@ -36,7 +37,7 @@ class Particle {
         this.density = (Math.random() * 30) + 1
     }
     draw(){
-        ctx.fillStyle = 'red'
+        ctx.fillStyle = 'white'
         ctx.beginPath()
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2 )
         ctx.closePath()
@@ -46,10 +47,18 @@ class Particle {
         let dx = mouse.x - this.x
         let dy = mouse.y - this.y 
         let distance = Math.sqrt(dx * dx + dy * dy)
-        if(distance < 100){
-            this.size = 30
+        let forceDirectionx = dx / distance
+        let forceDirectiony = dy /distance
+        let maxDistance = mouse.radius
+        let force = (maxDistance - distance) / maxDistance
+        let directionX = forceDirectionx * force * this.density
+        let directionY = forceDirectiony * force * this.density
+
+        if(distance < mouse.radius){
+            this.x -= directionX   
+            this.y -= directionY
         }else{
-            this.size = 3  
+            this.size = 3
         }
     }
 
